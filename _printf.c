@@ -28,10 +28,6 @@ char *_format(const char *format, unsigned int *start,
 		*start = end;
 		free_specification(specification);
 	}
-	else
-	{
-		*start = format_len - 1;
-	}
 	return (formatted_value);
 }
 /**
@@ -42,7 +38,7 @@ char *_format(const char *format, unsigned int *start,
 int _printf(const char *format, ...)
 {
 	int count = 0;
-	unsigned int i, buff_index, format_len;
+	unsigned int i, buff_index, format_len, j;
 	va_list argptr1;
 	char *data, *buffer = NULL;
 
@@ -57,9 +53,15 @@ int _printf(const char *format, ...)
 		{
 			if (format[i] == '%')
 			{
-				data = _format(format, &i, format_len, argptr1);
-				count += _write_str(buffer, &buff_index, BUFFER_SIZE, data);
-				free(data);
+				j = i;
+				if (i > j)
+				{
+					data = _format(format, &i, format_len, argptr1);
+					count += _write_str(buffer, &buff_index, BUFFER_SIZE, data);
+					free(data);
+				}
+				else
+					count += _write_char(buffer, &buff_index, BUFFER_SIZE, format[i]);
 			}
 			else
 			{
