@@ -51,21 +51,24 @@ char *handle_s_specifier(const conversion_specification_t *specification,
 	if (specification->conversion_specifier == 's')
 	{
 		temp = va_arg(argptr, char *);
-		if (specification->width > 0)
+		if (temp != NULL)
 		{
-			if (specification->flag != NULL
-					&& contains_char(specification->flag, '-') == TRUE)
+			if (specification->width > 0)
 			{
-				formatted_value = pad_right(temp, specification->width, ' ');
+				if (specification->flag != NULL
+						&& contains_char(specification->flag, '-') == TRUE)
+				{
+					formatted_value = pad_right(temp, specification->width, ' ');
+				}
+				else
+				{
+					formatted_value = pad_left(temp, specification->width, ' ');
+				}
 			}
 			else
 			{
-				formatted_value = pad_left(temp, specification->width, ' ');
+				formatted_value = copy_str(temp, _strlen(temp));
 			}
-		}
-		else
-		{
-			formatted_value = copy_str(temp, _strlen(temp));
 		}
 	}
 	return (formatted_value);

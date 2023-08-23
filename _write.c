@@ -61,24 +61,21 @@ int _write_str(char *buffer, unsigned int *index,
 
 	if (buffer != NULL)
 	{
-		if (data != NULL)
+		while (*data != '\0')
 		{
-			while (*data != '\0')
+			if (*index < buffer_size)
 			{
-				if (*index < buffer_size)
-				{
-					buffer[*index] = *data;
-					(*index)++;
-					buffer[*index] = '\0';
-				}
-				else
-				{
-					count += write(STDOUT_FILENO, buffer, buffer_size);
-					*index = 0;
-					buffer[*index] = '\0';
-				}
-				data++;
+				buffer[*index] = *data;
+				(*index)++;
+				buffer[*index] = '\0';
 			}
+			else
+			{
+				count += write(STDOUT_FILENO, buffer, buffer_size);
+				*index = 0;
+				buffer[*index] = '\0';
+			}
+			data++;
 		}
 	}
 	else

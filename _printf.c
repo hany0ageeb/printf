@@ -58,11 +58,8 @@ int _printf(const char *format, ...)
 			if (format[i] == '%')
 			{
 				data = _format(format, &i, format_len, argptr1);
-				if (data != NULL)
-				{
-					count += _write_str(buffer, &buff_index, BUFFER_SIZE, data);
-					free(data);
-				}
+				count += _write_str(buffer, &buff_index, BUFFER_SIZE, data);
+				free(data);
 			}
 			else
 			{
