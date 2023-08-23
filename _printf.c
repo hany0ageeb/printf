@@ -54,9 +54,9 @@ int _printf(const char *format, ...)
 			if (format[i] == '%')
 			{
 				j = i;
-				data = _format(format, &i, format_len, argptr1);
 				if (i > j)
 				{
+					data = _format(format, &i, format_len, argptr1);
 					count += _write_str(buffer, &buff_index, BUFFER_SIZE, data);
 					free(data);
 				}
