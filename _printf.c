@@ -68,6 +68,10 @@ int _printf(const char *format, ...)
 			i++;
 		}
 	}
+	else
+	{
+		return (-1);
+	}
 	count += _flush(buffer, _strlen(buffer));
 	va_end(argptr1);
 	free(buffer);
