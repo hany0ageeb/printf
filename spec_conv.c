@@ -17,6 +17,8 @@ void set_conv_spec_formatter(conv_spec_t *pspec)
 			pspec->formatter = &handle_per_spec;
 		else if (pspec->specifier == 'd' || pspec->specifier == 'i')
 			pspec->formatter = &handle_d_spec;
+		else if (pspec->specifier == 'b')
+			pspec->formatter = &handle_b_spec;
 		else
 			pspec->formatter = NULL;
 	}

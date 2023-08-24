@@ -46,6 +46,7 @@ char *handle_c_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_s_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_per_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_d_spec(const conv_spec_t *pspec, va_list argptr);
+char *handle_b_spec(const conv_spec_t *pspec, va_list argptr);
 int is_valid_flag(const char *flag);
 void set_conv_spec_formatter(conv_spec_t *pspec);
 int tokenize(conv_spec_t *spec, const char *format,
