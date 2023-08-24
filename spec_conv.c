@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdlib.h>
 /**
  * set_conv_spec_formatter - set the formatter pointer to correct func or null
  * @pspec: conversion specification

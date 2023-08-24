@@ -41,6 +41,7 @@ int last_index_of(const char *str, int start, int end, const char *sch);
 int index_of(const char *str, int start, int end, const char *search);
 char *sub_str(const char *str, int start, int end);
 char *int_to_str(long int num, const num_base_t base);
+int str_to_int(const char *format,int start, int end, num_base_t base);
 char *handle_c_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_s_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_per_spec(const conv_spec_t *pspec, va_list argptr);
@@ -49,6 +50,7 @@ int is_valid_flag(const char *flag);
 void set_conv_spec_formatter(conv_spec_t *pspec);
 int tokenize(conv_spec_t *spec, const char *format,
 		const int format_len, int pstart);
+void free_conv_spec(conv_spec_t *pspec);
 int _printf(const char *format, ...);
 int _write_str(const char *data, const int len);
 int _write_char(const char c);
