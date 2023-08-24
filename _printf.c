@@ -1,79 +1,168 @@
 #include "main.h"
-#include <stdarg.h>
-#include <stdio.h>
 #include <stdlib.h>
 /**
- * _format - format
+ * get_width - get width
  * @format: format string
- * @format_len: format string length
  * @start: start index
- * @argptr: arg pointer
- * Return: formatted value
+ * @end: end index
+ * Return: width value or 0
  */
-char *_format(const char *format, unsigned int *start,
-		const unsigned int format_len, va_list argptr)
+int get_width(const char *format, int *start, int end)
 {
-	char *formatted_value = NULL;
-	int end;
-	conversion_specification_t *specification;
+	int i = *start, width = 0;
 
-	end = index_of(format, (*start) + 1, format_len, CONVERSION_SPECIFIERS);
-	if (end != -1)
-	{
-		specification = interpret_specification(format, *start, end);
-		if (specification->handler != NULL)
-		{
-			formatted_value = specification->handler(specification, argptr);
-		}
-		*start = end;
-		free_specification(specification);
-	}
-	else
-	{
-		*start = format_len - 1;
-	}
-	return (formatted_value);
+	if (*start > end || format == NULL || *format == '\0')
+		return (0);
+	while (i <= end && format[i] != '\0' && format[i] >= '0' && format[i] <= '9')
+		i++;
+	width = str_to_int(format, *start, i - 1, decimal);
+	*start = i;
+	return (width);
 }
 /**
- * _printf - a cheap clone for printf!
+ * get_percision - get percision
  * @format: format string
- * Return: number of char written
+ * @pl: from index
+ * @h: to index
+ * Return: percision or -1
  */
-int _printf(const char *format, ...)
+int get_percision(const char *format, int *pl, int h)
 {
-	int count = 0;
-	unsigned int i, buff_index, format_len;
-	va_list argptr1;
-	char *data, *buffer = NULL;
+	int i, percision;
 
-	if (format != NULL)
+	if (format == NULL || *format == '\0' || h < *pl)
+		return (-1);
+	if (format[*pl] == '.')
 	{
-		buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		i = 0;
-		buff_index = 0;
-		format_len = _strlen(format);
-		va_start(argptr1, format);
-		while (i < format_len)
-		{
-			if (format[i] == '%')
-			{
-				data = _format(format, &i, format_len, argptr1);
-				count += _write_str(buffer, &buff_index, BUFFER_SIZE, data);
-				free(data);
-			}
-			else
-			{
-				count += _write_char(buffer, &buff_index, BUFFER_SIZE, format[i]);
-			}
+		i = (*pl) + 1;
+		while (format[i] >= '0' && format[i] <= '9' && i <= h && format[i] != '\0')
 			i++;
+		if ((*pl + 1) == i)
+		{
+			*pl = i;
+			return (0);
 		}
+		percision = str_to_int(format, (*pl) + 1, i - 1, decimal);
+		*pl = i;
+		return (percision);
 	}
 	else
 	{
 		return (-1);
 	}
-	count += _flush(buffer, _strlen(buffer));
-	va_end(argptr1);
-	free(buffer);
+}
+/**
+ * tokenize - extract conversion specifier from format
+ * @spec: conversion specification
+ * @format: format string
+ * @format_len: format string length
+ * @start: start index
+ * Return: end index
+ */
+int tokenize(conv_spec_t *spec, const char *format,
+		const int format_len, int start)
+{
+	int end, flag_end;
+
+	end = index_of(format, start + 1, format_len - 1, CONVERSION_SPECIFIERS);
+	if (end != -1)
+	{
+		if (spec == NULL)
+			spec = malloc(sizeof(conv_spec_t));
+		if (spec != NULL)
+		{
+			spec->specifier = format[end];
+			flag_end = last_index_of(format, start + 1, end - 1, CONVERSION_FLAGS);
+			if (flag_end != -1)
+			{
+				spec->flag = sub_str(format, start + 1, flag_end);
+				if (is_valid_flag(spec->flag) == TRUE)
+					flag_end++;
+				else
+					return (-1);
+			}
+			else
+				flag_end = start + 1;
+			spec->width = get_width(format, &flag_end, end - 1);
+			spec->percision = get_percision(format, &flag_end, end - 1);
+			if ((format[flag_end] == 'l' || format[flag_end] == 'h') && flag_end < end)
+			{
+				spec->len_mod = format[flag_end];
+				flag_end++;
+			}
+			if (end != flag_end)
+			{
+				spec->formatter = NULL;
+				return (-1);
+			}
+			else
+				set_conv_spec_formatter(spec);
+		}
+	}
+	return (end);
+}
+/**
+ * is_valid_flag - check if flag is valid
+ * @flag: flag string
+ * Return: 1 if valid 0 otherwise
+ */
+int is_valid_flag(const char *flag)
+{
+	int i;
+
+	if (flag == NULL || *flag == '\0')
+		return (TRUE);
+	i = 0;
+	while (flag[i] != '\0')
+	{
+		if (contains_char(CONVERSION_FLAGS, flag[i]) == FALSE)
+			return (FALSE);
+	}
+	return (TRUE);
+}
+/**
+ * _printf - cheap clone of printf function
+ * @format: format string
+ * Return: number of printed chars
+ */
+int _printf(const char *format, ...)
+{
+	int count = 0, i, format_len, end;
+	conv_spec_t *pspec;
+	char *data = NULL;
+	va_list argptr;
+
+	if (format == NULL)
+		return (-1);
+	format_len = _strlen(format);
+	pspec = malloc(sizeof(conv_spec_t));
+	va_start(argptr, format);
+	for (i = 0; i < format_len; ++i)
+	{
+		if (format[i] == '%')
+		{
+			end = tokenize(pspec, format, format_len, i);
+			if (end == -1)
+			{
+				count += _write_char(format[i]);
+			}
+			else
+			{
+				if (pspec->formatter != NULL)
+				{
+					data = pspec->formatter(pspec, argptr);
+					count += _write_str(data, _strlen(data));
+					i = end;
+				}
+			}
+		}
+		else
+		{
+			count += _write_char(format[i]);
+		}
+	}
+	free_conv_spec(pspec);
+	va_end(argptr);
 	return (count);
 }
+
