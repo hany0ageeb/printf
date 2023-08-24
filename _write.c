@@ -11,39 +11,31 @@
 int _write_str(char *buffer, const char *data, const int max_buff_size)
 {
 	int count = 0;
-	int i, j, data_len;
+	int i, j;
 
 	if (data != NULL)
 	{
-		if (buffer != NULL)
+		i = _strlen(buffer);
+		j = 0;
+		while (data[j] != '\0')
 		{
-			i = _strlen(buffer);
-			j = 0;
-			while (data[j] != '\0')
+			if (i < max_buff_size)
 			{
-				if (i < max_buff_size)
-				{
-					buffer[i] = data[j];
-					if (data[j + 1] == '\0')
-						buffer[i + 1] = '\0';
-					i++;
-				}
-				else
-				{
-					buffer[max_buff_size] = '\0';
-					count += write(STDOUT_FILENO, buffer, max_buff_size);
-					buffer[0] = data[j];
-					if (data[j + 1] == '\0')
-						buffer[1] = '\0';
-					i = 1;
-				}
-				j++;
+				buffer[i] = data[j];
+				if (data[j + 1] == '\0')
+					buffer[i + 1] = '\0';
+				i++;
 			}
-		}
-		else
-		{
-			data_len = _strlen(data);
-			count = write(STDOUT_FILENO, data, data_len);
+			else
+			{
+				buffer[max_buff_size] = '\0';
+				count += write(STDOUT_FILENO, buffer, max_buff_size);
+				buffer[0] = data[j];
+				if (data[j + 1] == '\0')
+					buffer[1] = '\0';
+				i = 1;
+			}
+			j++;
 		}
 	}
 	return (count);
@@ -77,7 +69,9 @@ int _write_char(char *buffer, const char c, const int max_buff_size)
 int _flush(char *buffer)
 {
 	int len = _strlen(buffer);
+	int count = write(STDOUT_FILENO, buffer, len);
 
-	return (write(STDOUT_FILENO, buffer, len));
+	buffer[0] = '\0';
+	return (count);
 }
 

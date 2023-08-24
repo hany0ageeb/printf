@@ -59,7 +59,7 @@ int get_percision(const char *format, int *pl, int h)
  * @start: start index
  * Return: end index
  */
-int tokenize(conv_spec_t *spec, const char *format,
+int tokenize(conv_spec_t **spec, const char *format,
 		const int format_len, int start)
 {
 	int end, flag_end;
@@ -67,36 +67,36 @@ int tokenize(conv_spec_t *spec, const char *format,
 	end = index_of(format, start + 1, format_len - 1, CONVERSION_SPECIFIERS);
 	if (end != -1)
 	{
-		if (spec == NULL)
-			spec = malloc(sizeof(conv_spec_t));
-		if (spec != NULL)
+		if (*spec == NULL)
+			*spec = malloc(sizeof(conv_spec_t));
+		if (*spec != NULL)
 		{
-			spec->specifier = format[end];
+			(*spec)->specifier = format[end];
 			flag_end = last_index_of(format, start + 1, end - 1, CONVERSION_FLAGS);
 			if (flag_end != -1)
 			{
-				spec->flag = sub_str(format, start + 1, flag_end);
-				if (is_valid_flag(spec->flag) == TRUE)
+				(*spec)->flag = sub_str(format, start + 1, flag_end);
+				if (is_valid_flag((*spec)->flag) == TRUE)
 					flag_end++;
 				else
 					return (-1);
 			}
 			else
 				flag_end = start + 1;
-			spec->width = get_width(format, &flag_end, end - 1);
-			spec->percision = get_percision(format, &flag_end, end - 1);
-			if ((format[flag_end] == 'l' || format[flag_end] == 'h') && flag_end < end)
+			(*spec)->width = get_width(format, &flag_end, end - 1);
+			(*spec)->percision = get_percision(format, &flag_end, end - 1);
+			if (flag_end < end && (format[flag_end] == 'l' || format[flag_end] == 'h'))
 			{
-				spec->len_mod = format[flag_end];
+				(*spec)->len_mod = format[flag_end];
 				flag_end++;
 			}
 			if (end != flag_end)
 			{
-				spec->formatter = NULL;
+				(*spec)->formatter = NULL;
 				return (-1);
 			}
 			else
-				set_conv_spec_formatter(spec);
+				set_conv_spec_formatter(*spec);
 		}
 	}
 	return (end);
@@ -130,7 +130,7 @@ int _printf(const char *format, ...)
 	int count = 0, i, format_len, end;
 	conv_spec_t *pspec = NULL;
 	char *data = NULL;
-	static char buffer[BUFF_SIZE];
+	static char buffer[BUFF_SIZE + 1];
 	static int buff_init = FALSE;
 	va_list argptr;
 
@@ -147,12 +147,12 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			end = tokenize(pspec, format, format_len, i);
+			end = tokenize(&pspec, format, format_len, i);
 			if (end == -1)
 				count += _write_char(buffer, format[i], BUFF_SIZE);
 			else
 			{
-				if (pspec->formatter != NULL)
+				if (pspec != NULL && pspec->formatter != NULL)
 				{
 					data = pspec->formatter(pspec, argptr);
 					count += _write_str(buffer, data, BUFF_SIZE);

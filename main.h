@@ -51,7 +51,7 @@ char *handle_b_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_u_spec(const conv_spec_t *pspec, va_list argptr);
 int is_valid_flag(const char *flag);
 void set_conv_spec_formatter(conv_spec_t *pspec);
-int tokenize(conv_spec_t *spec, const char *format,
+int tokenize(conv_spec_t **spec, const char *format,
 		const int format_len, int pstart);
 void free_conv_spec(conv_spec_t *pspec);
 int _printf(const char *format, ...);
