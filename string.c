@@ -93,4 +93,21 @@ char *sub_str(const char *str, int start, int end)
 	}
 	return (substr);
 }
+/**
+ * _to_upper - convert str to upper case
+ * @str: string
+ * Return: void
+ */
+void _to_upper(char *str)
+{
+	if (str != NULL)
+	{
+		while (*str != '\0')
+		{
+			if (*str >= 'a' && *str <= 'z')
+				*str = (*str) - 32;
+			str++;
+		}
+	}
+}
 

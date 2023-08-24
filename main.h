@@ -35,6 +35,7 @@ typedef struct conv_spec
 } conv_spec_t;
 char *_str(const char c, int len);
 char *copy_str(const char *src);
+void _to_upper(char *str);
 int contains_char(const char *str, const char c);
 int _strlen(const char *str);
 int last_index_of(const char *str, int start, int end, const char *sch);
@@ -47,6 +48,7 @@ char *handle_s_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_per_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_d_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_b_spec(const conv_spec_t *pspec, va_list argptr);
+char *handle_u_spec(const conv_spec_t *pspec, va_list argptr);
 int is_valid_flag(const char *flag);
 void set_conv_spec_formatter(conv_spec_t *pspec);
 int tokenize(conv_spec_t *spec, const char *format,

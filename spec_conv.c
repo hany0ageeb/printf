@@ -19,6 +19,14 @@ void set_conv_spec_formatter(conv_spec_t *pspec)
 			pspec->formatter = &handle_d_spec;
 		else if (pspec->specifier == 'b')
 			pspec->formatter = &handle_b_spec;
+		else if (pspec->specifier == 'u')
+			pspec->formatter = &handle_u_spec;
+		else if (pspec->specifier == 'o')
+			pspec->formatter = &handle_u_spec;
+		else if (pspec->specifier == 'x')
+			pspec->formatter = &handle_u_spec;
+		else if (pspec->specifier == 'X')
+			pspec->formatter = &handle_u_spec;
 		else
 			pspec->formatter = NULL;
 	}

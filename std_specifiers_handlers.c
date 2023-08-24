@@ -67,4 +67,36 @@ char *handle_d_spec(const conv_spec_t *pspec, va_list argptr)
 	}
 	return (formatted_value);
 }
+/**
+ * handle_u_spec - handle u o x X specifiers
+ * @pspec: conversion specification
+ * @argptr: var args
+ * Return: formatted value
+ */
+char *handle_u_spec(const conv_spec_t *pspec, va_list argptr)
+{
+	long int value;
+	char *formatted_value =  NULL;
+
+	if (pspec != NULL &&
+			(pspec->specifier == 'u' ||
+			 pspec->specifier == 'o' ||
+			 pspec->specifier == 'x' ||
+			 pspec->specifier == 'X'))
+	{
+		value = va_arg(argptr, unsigned int);
+		if (pspec->specifier == 'u')
+			formatted_value = int_to_str(value, decimal);
+		else if (pspec->specifier == 'o')
+			formatted_value = int_to_str(value, octal);
+		else if (pspec->specifier == 'x')
+			formatted_value = int_to_str(value, hexadecimal);
+		else if (pspec->specifier == 'X')
+		{
+			formatted_value = int_to_str(value, hexadecimal);
+			_to_upper(formatted_value);
+		}
+	}
+	return (formatted_value);
+}
 
