@@ -56,7 +56,7 @@ int _printf(const char *format, ...);
 int _write_str(const char *data, const int len);
 int _write_char(const char c);
 
-#define CONVERSION_SPECIFIERS "cs%di"
+#define CONVERSION_SPECIFIERS "cs%dibuoxXSprR"
 #define CONVERSION_FLAGS "+ #0-"
 #endif
 #ifndef NULL
