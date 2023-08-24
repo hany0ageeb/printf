@@ -128,14 +128,20 @@ int is_valid_flag(const char *flag)
 int _printf(const char *format, ...)
 {
 	int count = 0, i, format_len, end;
-	conv_spec_t *pspec;
+	conv_spec_t *pspec = NULL;
 	char *data = NULL;
+	static char buffer[BUFF_SIZE];
+	static int buff_init = FALSE;
 	va_list argptr;
 
 	if (format == NULL)
 		return (-1);
+	if (buff_init == FALSE)
+	{
+		buffer[0] = '\0';
+		buff_init = TRUE;
+	}
 	format_len = _strlen(format);
-	pspec = malloc(sizeof(conv_spec_t));
 	va_start(argptr, format);
 	for (i = 0; i < format_len; ++i)
 	{
@@ -143,25 +149,22 @@ int _printf(const char *format, ...)
 		{
 			end = tokenize(pspec, format, format_len, i);
 			if (end == -1)
-			{
-				count += _write_char(format[i]);
-			}
+				count += _write_char(buffer, format[i], BUFF_SIZE);
 			else
 			{
 				if (pspec->formatter != NULL)
 				{
 					data = pspec->formatter(pspec, argptr);
-					count += _write_str(data, _strlen(data));
+					count += _write_str(buffer, data, BUFF_SIZE);
 					i = end;
 				}
 			}
 		}
 		else
-		{
-			count += _write_char(format[i]);
-		}
+			count += _write_char(buffer, format[i], BUFF_SIZE);
 	}
 	free_conv_spec(pspec);
+	count += _flush(buffer);
 	va_end(argptr);
 	return (count);
 }

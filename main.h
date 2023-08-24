@@ -55,9 +55,10 @@ int tokenize(conv_spec_t *spec, const char *format,
 		const int format_len, int pstart);
 void free_conv_spec(conv_spec_t *pspec);
 int _printf(const char *format, ...);
-int _write_str(const char *data, const int len);
-int _write_char(const char c);
-
+int _write_str(char *buffer, const char *data, const int max_buff_size);
+int _write_char(char *buffer, const char c, const int max_buff_size);
+int _flush(char *buffer);
+#define BUFF_SIZE 1024
 #define CONVERSION_SPECIFIERS "cs%dibuoxXSprR"
 #define CONVERSION_FLAGS "+ #0-"
 #endif
