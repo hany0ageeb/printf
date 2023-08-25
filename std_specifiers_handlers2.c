@@ -92,6 +92,7 @@ char *handle_p_spec(const conv_spec_t *pspec, va_list argptr)
 			formatted_value[i] = '\0';
 			free(temp);
 		}
+		handle_width(&formatted_value, pspec);
 	}
 	return (formatted_value);
 }
