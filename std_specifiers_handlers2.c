@@ -100,8 +100,9 @@ char *handle_p_spec(const conv_spec_t *pspec, va_list argptr)
 /**
  * handle_percision - handle percision
  * @formatted_value: formatted value
- * @value: value
+ * @len: formatted_value length
  * @percision: percision
+ * Return: void
  */
 void handle_percision(char **formatted_value, const int len,
 		const int percision)
@@ -136,7 +137,7 @@ void handle_percision(char **formatted_value, const int len,
 	}
 }
 /**
- * handle_width: handle width modifier
+ * handle_width - handle width modifier
  * @formatted_value: formatted value
  * @pspec: conv specifications
  * Return: void

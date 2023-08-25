@@ -1,7 +1,7 @@
 #include "main.h"
 #include <stdlib.h>
-/*
- * reverse_str - revers string
+/**
+ * reverse_str - reverse string
  * @str: original string to reverse
  * Return: a pointer to a newly created reversed version of str.
  */
