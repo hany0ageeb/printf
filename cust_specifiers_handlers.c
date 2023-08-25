@@ -52,7 +52,7 @@ char *handle_S_spec(const conv_spec_t *spec, va_list argptr)
 	{
 		temp = va_arg(argptr, char *);
 		if (temp == NULL)
-			return (formatted_value);
+			return (cp_str("(null)"));
 		len = calc_len_for_S_spec(temp);
 		formatted_value = malloc(sizeof(char) * (len + 1));
 		if (formatted_value == NULL)
