@@ -161,8 +161,6 @@ int _printf(const char *format, ...)
 					data = pspec->formatter(pspec, argptr);
 					if (data != NULL)
 						count += _write_str(buffer, data, BUFF_SIZE);
-					else
-						count += _write_str(buffer, "(null)", BUFF_SIZE);
 					i = end;
 					free(data);
 				}

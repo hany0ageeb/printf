@@ -32,7 +32,14 @@ char *handle_s_spec(const conv_spec_t *pspec, va_list argptr)
 	if (pspec != NULL && pspec->specifier == 's')
 	{
 		temp = va_arg(argptr, char *);
-		formatted_value = copy_str(temp);
+		if (temp != NULL)
+		{
+			formatted_value = copy_str(temp);
+		}
+		else
+		{
+			formatted_value = copy_str("(null)");
+		}
 		handle_width(&formatted_value, pspec);
 	}
 	return (formatted_value);
