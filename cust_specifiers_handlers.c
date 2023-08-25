@@ -112,24 +112,29 @@ char *hanlde_r_spec(const conv_spec_t *spec, va_list argptr)
  */
 char *handle_R_spec(const conv_spec_t *spec, va_list argptr)
 {
-	char *formatted_value = NULL;
-	int i;
+	char *formatted_value = NULL, *temp;
+	int i, len;
 
 	if (spec != NULL && spec->specifier == 'R')
 	{
-		formatted_value = cp_str(va_arg(argptr, char *));
-		if (formatted_value != NULL)
+		temp = va_arg(argptr, char *);
+		if (temp != NULL)
 		{
-			for (i = 0; formatted_value[i] != '\0'; ++i)
+			formatted_value = cp_str(temp);
+			len = _strlen(formatted_value);
+			if (formatted_value != NULL)
 			{
-				if (formatted_value[i] >= 'A' && formatted_value[i] <= 'M')
-					formatted_value[i] += 13;
-				else if (formatted_value[i] >= 'N' && formatted_value[i] <= 'Z')
-					formatted_value[i] -= 13;
-				else if (formatted_value[i] >= 'a' && formatted_value[i] <= 'm')
-					formatted_value[i] += 13;
-				else if (formatted_value[i] >= 'n' && formatted_value[i] <= 'z')
-					formatted_value[i] += 13;
+				for (i = 0; i < len; ++i)
+				{
+					if (formatted_value[i] >= 'A' && formatted_value[i] <= 'M')
+						formatted_value[i] += 13;
+					else if (formatted_value[i] >= 'N' && formatted_value[i] <= 'Z')
+						formatted_value[i] -= 13;
+					else if (formatted_value[i] >= 'a' && formatted_value[i] <= 'm')
+						formatted_value[i] += 13;
+					else if (formatted_value[i] >= 'n' && formatted_value[i] <= 'z')
+						formatted_value[i] += 13;
+				}
 			}
 		}
 	}
