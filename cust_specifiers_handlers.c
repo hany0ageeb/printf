@@ -122,20 +122,14 @@ char *handle_R_spec(const conv_spec_t *spec, va_list argptr)
 		{
 			for (i = 0; formatted_value[i] != '\0'; ++i)
 			{
-				if (formatted_value[i] >= 'a' && formatted_value[i] <= 'z')
-				{
-					if (formatted_value[i] < 'n')
-						formatted_value[i] += 13;
-					else
-						formatted_value -= 13;
-				}
-				else if (formatted_value[i] >= 'A' && formatted_value[i] <= 'Z')
-				{
-					if (formatted_value[i] < 'N')
-						formatted_value[i] += 13;
-					else
-						formatted_value[i] -= 13;
-				}
+				if (formatted_value[i] >= 'A' && formatted_value[i] <= 'M')
+					formatted_value[i] += 13;
+				else if (formatted_value[i] >= 'N' && formatted_value[i] <= 'Z')
+					formatted_value[i] -= 13;
+				else if (formatted_value[i] >= 'a' && formatted_value[i] <= 'm')
+					formatted_value[i] += 13;
+				else if (formatted_value[i] >= 'n' && formatted_value[i] <= 'z')
+					formatted_value[i] += 13;
 			}
 		}
 	}
