@@ -86,7 +86,7 @@ char *handle_S_spec(const conv_spec_t *spec, va_list argptr)
 	return (formatted_value);
 }
 /**
- * handle_r_spec - handler custom specifier r
+ * hanlde_r_spec - handle custome specifier r
  * @spec: spec
  * @argptr: argptr
  * Return: formatted_value
@@ -103,7 +103,7 @@ char *hanlde_r_spec(const conv_spec_t *spec, va_list argptr)
 	return (formatted_value);
 }
 /**
- * handler_R_spec - handle custom specifier R
+ * handle_R_spec - handle custom specifier R
  * @spec: spec
  * @argptr: var args
  * Return: formatted value
