@@ -49,6 +49,7 @@ char *handle_per_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_d_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_b_spec(const conv_spec_t *pspec, va_list argptr);
 void handle_flag(char **, const char *, const char);
+long int handle_len_mod(const char, const char, va_list);
 char *handle_u_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_S_spec(const conv_spec_t *spec, va_list argptr);
 char *handle_p_spec(const conv_spec_t *spec, va_list argptr);

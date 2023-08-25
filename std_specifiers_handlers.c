@@ -57,12 +57,12 @@ char *handle_per_spec(
  */
 char *handle_d_spec(const conv_spec_t *pspec, va_list argptr)
 {
-	int value;
+	long int value;
 	char *formatted_value = NULL;
 
 	if (pspec != NULL && (pspec->specifier == 'd' || pspec->specifier == 'i'))
 	{
-		value = va_arg(argptr, int);
+		value = handle_len_mod(pspec->len_mod, pspec->specifier, argptr);
 		formatted_value = int_to_str(value, decimal);
 		handle_flag(&formatted_value, pspec->flag, pspec->specifier);
 	}
@@ -85,7 +85,7 @@ char *handle_u_spec(const conv_spec_t *pspec, va_list argptr)
 			 pspec->specifier == 'x' ||
 			 pspec->specifier == 'X'))
 	{
-		value = va_arg(argptr, unsigned int);
+		value = handle_len_mod(pspec->len_mod, pspec->specifier, argptr);
 		if (pspec->specifier == 'u')
 			formatted_value = int_to_str(value, decimal);
 		else if (pspec->specifier == 'o')

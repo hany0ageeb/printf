@@ -65,6 +65,33 @@ void handle_flag(char **formatted_value, const char *flag, const char spec)
 	}
 }
 /**
+ * handle_len_mod - handle len modifier
+ * @len_mod: len mod
+ * @spec: spec
+ * @argptr: var args
+ * Return: value
+ */
+long int handle_len_mod(const char len_mod, const char spec, va_list argptr)
+{
+	long int value;
+
+	if (len_mod == 'l')
+	{
+		if (spec == 'd' || spec == 'i')
+			value = va_arg(argptr, long int);
+		else if (spec == 'u' || spec == 'o' || spec == 'x' || spec == 'X')
+			value = va_arg(argptr, unsigned long int);
+	}
+	else
+	{
+		if (spec == 'd' || spec == 'i')
+			value = va_arg(argptr, int);
+		else if (spec == 'u' || spec == 'o' || spec == 'x' || spec == 'X')
+			value = va_arg(argptr, unsigned int);
+	}
+	return (value);
+}
+/**
  * handle_p_spec - handle p conv specifier
  * @pspec: spec con
  * @argptr: var args
