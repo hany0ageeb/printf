@@ -38,6 +38,7 @@ char *copy_str(const char *src);
 void _to_upper(char *str);
 int contains_char(const char *str, const char c);
 int _strlen(const char *str);
+char *reverse_str(const char *str);
 int last_index_of(const char *str, int start, int end, const char *sch);
 int index_of(const char *str, int start, int end, const char *search);
 char *sub_str(const char *str, int start, int end);
@@ -57,6 +58,7 @@ void handle_width(char **, const conv_spec_t *);
 char *handle_u_spec(const conv_spec_t *pspec, va_list argptr);
 char *handle_S_spec(const conv_spec_t *spec, va_list argptr);
 char *handle_p_spec(const conv_spec_t *spec, va_list argptr);
+char *hanlde_r_spec(const conv_spec_t *spec, va_list argptr);
 int is_valid_flag(const char *flag);
 void set_conv_spec_formatter(conv_spec_t *pspec);
 int tokenize(conv_spec_t **spec, const char *format,

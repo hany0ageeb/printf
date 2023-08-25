@@ -38,7 +38,7 @@ int calc_len_for_S_spec(const char *temp)
 	return (len);
 }
 /**
- * handle_S_specifier - handle S custom specifier
+ * handle_S_spec - handle S custom specifier
  * @spec: spec
  * @argptr: args
  * Return: formatted value
@@ -85,3 +85,21 @@ char *handle_S_spec(const conv_spec_t *spec, va_list argptr)
 	}
 	return (formatted_value);
 }
+/**
+ * handle_r_spec - handler custom specifier r
+ * @spec: spec
+ * @argptr: argptr
+ * Return: formatted_value
+ */
+char *hanlde_r_spec(const conv_spec_t *spec, va_list argptr)
+{
+	char *temp = NULL, *formatted_value = NULL;
+
+	if (spec != NULL && spec->specifier == 'r')
+	{
+		temp = va_arg(argptr, char *);
+		formatted_value = reverse_str(temp);
+	}
+	return (formatted_value);
+}
+
