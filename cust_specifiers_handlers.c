@@ -1,6 +1,7 @@
 #include "main.h"
 #include <stdarg.h>
 #include <stdlib.h>
+#include <stdio.h>
 /**
  * handle_b_spec - handle custom specifier b
  * @spec: conversion specification
@@ -30,7 +31,7 @@ int calc_len_for_S_spec(const char *temp)
 
 	for (; temp[i] != '\0'; ++i)
 	{
-		if ((temp[i] >= 0 && temp[i] < 32) || temp[i] >= 127)
+		if ((temp[i] > 0 && temp[i] < 32) || temp[i] >= 127)
 			len += 4;
 		else
 			len++;
@@ -59,7 +60,7 @@ char *handle_S_spec(const conv_spec_t *spec, va_list argptr)
 			return (formatted_value);
 		for (i = 0; temp[i] != '\0'; ++i)
 		{
-			if ((temp[i] >= 0 && temp[i] < 32) || temp[i] >= 127)
+			if ((temp[i] > 0 && temp[i] < 32) || temp[i] >= 127)
 			{
 				formatted_value[j] = '\\';
 				formatted_value[j + 1] = 'x';
@@ -76,7 +77,7 @@ char *handle_S_spec(const conv_spec_t *spec, va_list argptr)
 					formatted_value[j + 3] = hex_code[1];
 				}
 				free(hex_code);
-				j += 2;
+				j += 3;
 			}
 			else
 				formatted_value[j] = temp[i];
