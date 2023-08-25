@@ -159,7 +159,8 @@ void handle_width(char **formatted_value, const conv_spec_t *pspec)
 	}
 	else if (pspec->specifier == 'd' || pspec->specifier == 'i' ||
 			pspec->specifier == 'u' || pspec->specifier == 'o' ||
-			pspec->specifier == 'x' || pspec->specifier == 'X')
+			pspec->specifier == 'x' || pspec->specifier == 'X' ||
+			pspec->specifier == 'p')
 	{
 		handle_percision(formatted_value, len, pspec->percision);
 		len = _strlen(*formatted_value);
