@@ -43,6 +43,8 @@ int get_percision(const char *format, int *pl, int h)
 			return (0);
 		}
 		percision = str_to_int(format, (*pl) + 1, i - 1, decimal);
+		if (percision < 0)
+			percision = -1;
 		*pl = i;
 		return (percision);
 	}

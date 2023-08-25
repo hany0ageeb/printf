@@ -15,6 +15,7 @@ char *handle_c_spec(const conv_spec_t *pspec, va_list argptr)
 	{
 		c = va_arg(argptr, int);
 		formatted_value = _str(c, 1);
+		handle_width(&formatted_value, pspec);
 	}
 	return (formatted_value);
 }
@@ -32,6 +33,7 @@ char *handle_s_spec(const conv_spec_t *pspec, va_list argptr)
 	{
 		temp = va_arg(argptr, char *);
 		formatted_value = copy_str(temp);
+		handle_width(&formatted_value, pspec);
 	}
 	return (formatted_value);
 }
@@ -65,6 +67,7 @@ char *handle_d_spec(const conv_spec_t *pspec, va_list argptr)
 		value = handle_len_mod(pspec->len_mod, pspec->specifier, argptr);
 		formatted_value = int_to_str(value, decimal);
 		handle_flag(&formatted_value, pspec->flag, pspec->specifier);
+		handle_width(&formatted_value, pspec);
 	}
 	return (formatted_value);
 }
@@ -98,6 +101,7 @@ char *handle_u_spec(const conv_spec_t *pspec, va_list argptr)
 			_to_upper(formatted_value);
 		}
 		handle_flag(&formatted_value, pspec->flag, pspec->specifier);
+		handle_width(&formatted_value, pspec);
 	}
 	return (formatted_value);
 }

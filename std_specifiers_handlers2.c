@@ -2,35 +2,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
 /**
- * _prepend - prepend app in front of str
- * @str: string
- * @str_len: str length
- * @app: string
- * @app_len: app length
- * Return: void
- */
-void _prepend(char **str, const int str_len, const char *app,
-		const int app_len)
-{
-	char *temp;
-	int i, j;
-
-	if (str != NULL)
-	{
-		temp = malloc(sizeof(char) * (str_len + app_len + 1));
-		if (temp != NULL)
-		{
-			for (i = 0; i < app_len; ++i)
-				temp[i] = app[i];
-			for (j = 0; j < str_len; ++j, ++i)
-				temp[i] = (*str)[j];
-			temp[i] = '\0';
-			free(*str);
-			*str = temp;
-		}
-	}
-}
-/**
  * handle_flag - handle flag
  * @formatted_value: string
  * @flag: flag
@@ -125,5 +96,88 @@ char *handle_p_spec(const conv_spec_t *pspec, va_list argptr)
 		}
 	}
 	return (formatted_value);
+}
+/**
+ * handle_percision - handle percision
+ * @formatted_value: formatted value
+ * @value: value
+ * @percision: percision
+ */
+void handle_percision(char **formatted_value, const int len,
+		const int percision)
+{
+	char sign;
+
+	if (percision != -1)
+	{
+		if (percision == 0)
+		{
+			if ((len == 1 && (*formatted_value)[0] == '0') ||
+					(len == 2 && (*formatted_value)[1] == '0'))
+				(*formatted_value)[0] = '\0';
+		}
+		else
+		{
+			if (len < percision)
+			{
+				if ((*formatted_value)[0] == '-' || (*formatted_value)[0] == '+')
+				{
+					sign = (*formatted_value)[0];
+					(*formatted_value)[0] = '0';
+					pad_left(formatted_value, len, percision, '0');
+					(*formatted_value)[0] = sign;
+				}
+				else
+				{
+					pad_left(formatted_value, len, percision, '0');
+				}
+			}
+		}
+	}
+}
+/**
+ * handle_width: handle width modifier
+ * @formatted_value: formatted value
+ * @pspec: conv specifications
+ * Return: void
+ */
+void handle_width(char **formatted_value, const conv_spec_t *pspec)
+{
+	int len;
+	char sign;
+
+	if (formatted_value == NULL)
+		return;
+	len = _strlen(*formatted_value);
+	if ((pspec->specifier == 'c' || pspec->specifier == 's')
+			&& len < pspec->width)
+	{
+		if (contains_char(pspec->flag, '-'))
+			pad_right(formatted_value, len, pspec->width, ' ');
+		else
+			pad_left(formatted_value, len, pspec->width, ' ');
+	}
+	else if ((pspec->specifier == 'd' || pspec->specifier == 'i'))
+	{
+		handle_percision(formatted_value, len, pspec->percision);
+		len = _strlen(*formatted_value);
+		if (len >= pspec->width)
+			return;
+		if (contains_char(pspec->flag, '-'))
+			if ((*formatted_value)[0] == '-' || (*formatted_value)[0] == '+')
+			{
+				sign = (*formatted_value)[0];
+				(*formatted_value)[0] = ' ';
+				pad_right(formatted_value, len, pspec->width, ' ');
+				(*formatted_value)[0] = sign;
+			}
+			else
+				pad_right(formatted_value, len, pspec->width, ' ');
+		else
+			if (contains_char(pspec->flag, '0') && pspec->percision != -1)
+				pad_left(formatted_value, len, pspec->width, '0');
+			else
+				pad_left(formatted_value, len, pspec->width, ' ');
+	}
 }
 
