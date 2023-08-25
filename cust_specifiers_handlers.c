@@ -64,6 +64,7 @@ char *handle_S_spec(const conv_spec_t *spec, va_list argptr)
 				formatted_value[j] = '\\';
 				formatted_value[j + 1] = 'x';
 				hex_code = int_to_str(temp[i], hexadecimal);
+				_to_upper(hex_code);
 				if (temp[i] < (int)hexadecimal)
 				{
 					formatted_value[j + 2] = '0';
