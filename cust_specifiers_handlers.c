@@ -102,4 +102,41 @@ char *hanlde_r_spec(const conv_spec_t *spec, va_list argptr)
 	}
 	return (formatted_value);
 }
+/**
+ * handler_R_spec - handle custom specifier R
+ * @spec: spec
+ * @argptr: var args
+ * Return: formatted value
+ */
+char *handle_R_spec(const conv_spec_t *spec, va_list argptr)
+{
+	char *formatted_value = NULL;
+	int i;
+
+	if (spec != NULL && spec->specifier == 'R')
+	{
+		formatted_value = cp_str(va_arg(argptr, char *));
+		if (formatted_value != NULL)
+		{
+			for (i = 0; formatted_value[i] != '\0'; ++i)
+			{
+				if (formatted_value[i] >= 'a' && formatted_value[i] <= 'z')
+				{
+					if (formatted_value[i] < 'n')
+						formatted_value[i] += 13;
+					else
+						formatted_value -= 13;
+				}
+				else if (formatted_value[i] >= 'A' && formatted_value[i] <= 'Z')
+				{
+					if (formatted_value[i] < 'N')
+						formatted_value[i] += 13;
+					else
+						formatted_value[i] -= 13;
+				}
+			}
+		}
+	}
+	return (formatted_value);
+}
 
