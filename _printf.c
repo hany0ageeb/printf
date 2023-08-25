@@ -153,7 +153,7 @@ int _printf(const char *format, ...)
 		{
 			end = tokenize(&pspec, format, format_len, i);
 			if (end == -1)
-				return (-1);
+				count += _write_char(buffer, format[i], BUFF_SIZE);
 			else
 			{
 				if (pspec != NULL && pspec->formatter != NULL)
