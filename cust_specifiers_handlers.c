@@ -30,7 +30,7 @@ int calc_len_for_S_spec(const char *temp)
 
 	for (; temp[i] != '\0'; ++i)
 	{
-		if ((temp[i] > 0 && temp[i] < 32) || temp[i] >= 127)
+		if ((temp[i] >= 0 && temp[i] < 32) || temp[i] >= 127)
 			len += 4;
 		else
 			len++;
@@ -59,7 +59,7 @@ char *handle_S_spec(const conv_spec_t *spec, va_list argptr)
 			return (formatted_value);
 		for (i = 0; temp[i] != '\0'; ++i)
 		{
-			if ((temp[i] > 0 && temp[i] < 32) || temp[i] >= 127)
+			if ((temp[i] >= 0 && temp[i] < 32) || temp[i] >= 127)
 			{
 				formatted_value[j] = '\\';
 				formatted_value[j + 1] = 'x';
