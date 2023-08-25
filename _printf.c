@@ -153,14 +153,18 @@ int _printf(const char *format, ...)
 		{
 			end = tokenize(&pspec, format, format_len, i);
 			if (end == -1)
-				count += _write_char(buffer, format[i], BUFF_SIZE);
+				return (-1);
 			else
 			{
 				if (pspec != NULL && pspec->formatter != NULL)
 				{
 					data = pspec->formatter(pspec, argptr);
-					count += _write_str(buffer, data, BUFF_SIZE);
+					if (data != NULL)
+						count += _write_str(buffer, data, BUFF_SIZE);
+					else
+						count += _write_str(buffer, "(null)", BUFF_SIZE);
 					i = end;
+					free(data);
 				}
 			}
 		}
