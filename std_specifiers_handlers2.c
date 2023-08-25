@@ -79,9 +79,7 @@ char *handle_p_spec(const conv_spec_t *pspec, va_list argptr)
 		value = (unsigned long int)va_arg(argptr, void *);
 		if (value == 0)
 		{
-			formatted_value = malloc(sizeof(char) * 2);
-			formatted_value[0] = '0';
-			formatted_value[1] = '\0';
+			formatted_value = cp_str("(nil)");
 		}
 		else
 		{
