@@ -117,6 +117,7 @@ int is_valid_flag(const char *flag)
 	{
 		if (contains_char(CONVERSION_FLAGS, flag[i]) == FALSE)
 			return (FALSE);
+		i++;
 	}
 	return (TRUE);
 }

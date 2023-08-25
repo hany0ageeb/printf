@@ -64,6 +64,7 @@ char *handle_d_spec(const conv_spec_t *pspec, va_list argptr)
 	{
 		value = va_arg(argptr, int);
 		formatted_value = int_to_str(value, decimal);
+		handle_flag(&formatted_value, pspec->flag, pspec->specifier);
 	}
 	return (formatted_value);
 }
@@ -96,6 +97,7 @@ char *handle_u_spec(const conv_spec_t *pspec, va_list argptr)
 			formatted_value = int_to_str(value, hexadecimal);
 			_to_upper(formatted_value);
 		}
+		handle_flag(&formatted_value, pspec->flag, pspec->specifier);
 	}
 	return (formatted_value);
 }
