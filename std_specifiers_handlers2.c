@@ -9,7 +9,8 @@
  * @app_len: app length
  * Return: void
  */
-void _prepend(char **str, const int str_len, const char *app, const int app_len)
+void _prepend(char **str, const int str_len, const char *app,
+		const int app_len)
 {
 	char *temp;
 	int i, j;
