@@ -157,7 +157,9 @@ void handle_width(char **formatted_value, const conv_spec_t *pspec)
 		else
 			pad_left(formatted_value, len, pspec->width, ' ');
 	}
-	else if ((pspec->specifier == 'd' || pspec->specifier == 'i'))
+	else if (pspec->specifier == 'd' || pspec->specifier == 'i' ||
+			pspec->specifier == 'u' || pspec->specifier == 'o' ||
+			pspec->specifier == 'x' || pspec->specifier == 'X')
 	{
 		handle_percision(formatted_value, len, pspec->percision);
 		len = _strlen(*formatted_value);
@@ -174,7 +176,7 @@ void handle_width(char **formatted_value, const conv_spec_t *pspec)
 			else
 				pad_right(formatted_value, len, pspec->width, ' ');
 		else
-			if (contains_char(pspec->flag, '0') && pspec->percision != -1)
+			if (contains_char(pspec->flag, '0') && pspec->percision == -1)
 				pad_left(formatted_value, len, pspec->width, '0');
 			else
 				pad_left(formatted_value, len, pspec->width, ' ');
