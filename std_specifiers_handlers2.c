@@ -70,20 +70,20 @@ long int handle_len_mod(const char len_mod, const char spec, va_list argptr)
  */
 char *handle_p_spec(const conv_spec_t *pspec, va_list argptr)
 {
-	unsigned long int value;
+	size_t value;
 	char *temp, *formatted_value;
 	int i, j;
 
 	if (pspec != NULL && pspec->specifier == 'p')
 	{
-		value = (unsigned long int)va_arg(argptr, void *);
+		value = va_arg(argptr, size_t);
 		if (value == 0)
 		{
 			formatted_value = cp_str("(nil)");
 		}
 		else
 		{
-			temp = int_to_str((long int)value, hexadecimal);
+			temp = uint_to_str(value, hexadecimal);
 			formatted_value = malloc(sizeof(char) * (_strlen(temp) + 3));
 			formatted_value[0] = '0';
 			formatted_value[1] = 'x';

@@ -1,6 +1,7 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_
 #include <stdarg.h>
+#include <stddef.h>
 /**
  * enum number_base - number base system
  * @binary: binary number system base 2
@@ -44,6 +45,7 @@ int last_index_of(const char *str, int start, int end, const char *sch);
 int index_of(const char *str, int start, int end, const char *search);
 char *sub_str(const char *str, int start, int end);
 char *int_to_str(long int num, const num_base_t base);
+char *uint_to_str(size_t num, const num_base_t base);
 void _prepend(char **, const int, const char *, const int);
 void pad_left(char **pstr, const int str_len, const int w, const char pad);
 void pad_right(char **pstr, const int str_len, const int w, const char pad);

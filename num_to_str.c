@@ -22,6 +22,45 @@ int int_len(long int num, const num_base_t base)
 	return (len);
 }
 /**
+ * uint_len - get length of num
+ * @num: number
+ * @base: base
+ * Return: length
+ */
+int uint_len(size_t num, const num_base_t base)
+{
+	int len = 0;
+
+	do {
+		len++;
+		num /= (unsigned int)base;
+	} while (num > 0);
+	return (len);
+}
+/**
+ * uint_to_str - convert size_t to string
+ * @num: number
+ * @base: number bas system
+ * Return: string
+ */
+char *uint_to_str(size_t num, const num_base_t base)
+{
+	const char *digits = "0123456789abcdef";
+	int len = uint_len(num, base);
+	char *num_str = malloc(sizeof(char) * (len + 1));
+	int i = len - 1;
+
+	if (num_str != NULL)
+	{
+		do {
+			num_str[i] = digits[num % (int)base];
+			num /= (unsigned int)base;
+			i--;
+		} while (num > 0);
+	}
+	return (num_str);
+}
+/**
  * int_to_str - convert int to string
  * @num: integer number
  * @base: number system 2, 8, 10, 16
