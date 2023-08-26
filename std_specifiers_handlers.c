@@ -88,7 +88,7 @@ char *handle_d_spec(const conv_spec_t *pspec, va_list argptr)
  */
 char *handle_u_spec(const conv_spec_t *pspec, va_list argptr)
 {
-	long int value;
+	size_t value;
 	char *formatted_value =  NULL;
 
 	if (pspec != NULL &&
@@ -97,7 +97,7 @@ char *handle_u_spec(const conv_spec_t *pspec, va_list argptr)
 			 pspec->specifier == 'x' ||
 			 pspec->specifier == 'X'))
 	{
-		value = handle_len_mod(pspec->len_mod, pspec->specifier, argptr);
+		value = handle_len_mode_u(pspec->len_mod, pspec->specifier, argptr);
 		if (pspec->specifier == 'u')
 			formatted_value = int_to_str(value, decimal);
 		else if (pspec->specifier == 'o')
