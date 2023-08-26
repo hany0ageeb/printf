@@ -16,9 +16,9 @@ void handle_flag(char **formatted_value, const char *flag, const char spec)
 	{
 		if (contains_char(flag, '#') == TRUE)
 		{
-			if (spec == 'x')
+			if (spec == 'x' && (*formatted_value)[0] != '0')
 				_prepend(formatted_value, len, "0x", 2);
-			else if (spec == 'X')
+			else if (spec == 'X' && (*formatted_value)[0] != '0')
 				_prepend(formatted_value, len, "0X", 2);
 			else if (spec == 'o' && (*formatted_value)[0] != '0')
 				_prepend(formatted_value, len, "0", 1);
