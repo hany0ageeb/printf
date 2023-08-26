@@ -107,37 +107,23 @@ int tokenize(conv_spec_t **spec, const char *format,
 /**
  * _print_f - helper function for printf
  * @pspec: pspec
- * @format: format
- * @format_len: format length
- * @pi: index
  * @buffer: buffer
  * @argptr: var args
- * Return: -1 if error or count of printed char
+ * Return: count of printed char
  */
-int _print_f(conv_spec_t **pspec, const char *format, const int format_len,
-		int *pi, char *buffer, va_list argptr)
+int _print_f(const conv_spec_t *pspec, va_list argptr, char *buffer)
 {
-	int end = tokenize(pspec, format, format_len, *pi);
-	int count = -1;
 	char *data = NULL;
+	int count = 0;
 
-	if (end == -1)
+	if (pspec != NULL && pspec->formatter != NULL)
 	{
-		if (*pi < (format_len - 1))
-			_write_char(buffer, format[*pi], BUFF_SIZE);
-		return (-1);
-	}
-	else
-	{
-		if (*pspec != NULL && (*pspec)->formatter != NULL)
-		{
-			data = (*pspec)->formatter(*pspec, argptr);
-			count = _write_str(buffer, data, BUFF_SIZE);
-			*pi = end;
-			free(data);
-		}
+		data = pspec->formatter(pspec, argptr);
+		count = _write_str(buffer, data, BUFF_SIZE);
+		free(data);
 		return (count);
 	}
+	return (count);
 }
 /**
  * _printf - cheap clone of printf function
@@ -146,7 +132,7 @@ int _print_f(conv_spec_t **pspec, const char *format, const int format_len,
  */
 int _printf(const char *format, ...)
 {
-	int count = 0, i, format_len = _strlen(format), ret;
+	int count = 0, i, format_len = _strlen(format), end;
 	conv_spec_t *pspec = NULL;
 	static char buffer[BUFF_SIZE + 1];
 	static int buff_init = FALSE;
@@ -164,10 +150,19 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			ret = _print_f(&pspec, format, format_len, &i, buffer, argptr);
-			if (ret == -1)
-				return (-1);
-			count += ret;
+			end = tokenize(&pspec, format, format_len, i);
+			if (end != -1)
+			{
+				count += _print_f(pspec, argptr, buffer);
+				i = end;
+			}
+			else
+			{
+				if (i < (format_len - 1))
+					count += _write_char(buffer, format[i], BUFF_SIZE);
+				else
+					return (-1);
+			}
 		}
 		else
 			count += _write_char(buffer, format[i], BUFF_SIZE);
