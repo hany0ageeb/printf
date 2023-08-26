@@ -115,10 +115,21 @@ int _print_f(const conv_spec_t *pspec, va_list argptr, char *buffer)
 {
 	char *data = NULL;
 	int count = 0;
+	int data_len;
 
 	if (pspec != NULL && pspec->formatter != NULL)
 	{
 		data = pspec->formatter(pspec, argptr);
+		if (data != NULL)
+		{
+			data_len = _strlen(data);
+			if (data_len == 1 && data[0] == '\a')
+			{
+				data[0] = '\0';
+				_write_str(buffer, data, BUFF_SIZE);
+				return (1);
+			}
+		}
 		count = _write_str(buffer, data, BUFF_SIZE);
 		free(data);
 		return (count);
