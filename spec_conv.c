@@ -52,4 +52,23 @@ void free_conv_spec(conv_spec_t *pspec)
 		free(pspec);
 	}
 }
+/**
+ * is_valid_flag - check if flag is valid
+ * @flag: flag string
+ * Return: 1 if valid 0 otherwise
+ */
+int is_valid_flag(const char *flag)
+{
+	int i;
 
+	if (flag == NULL || *flag == '\0')
+		return (TRUE);
+	i = 0;
+	while (flag[i] != '\0')
+	{
+		if (contains_char(CONVERSION_FLAGS, flag[i]) == FALSE)
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}

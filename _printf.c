@@ -105,24 +105,39 @@ int tokenize(conv_spec_t **spec, const char *format,
 	return (end);
 }
 /**
- * is_valid_flag - check if flag is valid
- * @flag: flag string
- * Return: 1 if valid 0 otherwise
+ * _print_f - helper function for printf
+ * @pspec: pspec
+ * @format: format
+ * @format_len: format length
+ * @pi: index
+ * @buffer: buffer
+ * @argptr: var args
+ * Return: -1 if error or count of printed char
  */
-int is_valid_flag(const char *flag)
+int _print_f(conv_spec_t **pspec, const char *format, const int format_len,
+		int *pi, char *buffer, va_list argptr)
 {
-	int i;
+	int end = tokenize(pspec, format, format_len, *pi);
+	int count = -1;
+	char *data = NULL;
 
-	if (flag == NULL || *flag == '\0')
-		return (TRUE);
-	i = 0;
-	while (flag[i] != '\0')
+	if (end == -1)
 	{
-		if (contains_char(CONVERSION_FLAGS, flag[i]) == FALSE)
-			return (FALSE);
-		i++;
+		if (*pi < (format_len - 1))
+			_write_char(buffer, format[*pi], BUFF_SIZE);
+		return (-1);
 	}
-	return (TRUE);
+	else
+	{
+		if (*pspec != NULL && (*pspec)->formatter != NULL)
+		{
+			data = (*pspec)->formatter(*pspec, argptr);
+			count = _write_str(buffer, data, BUFF_SIZE);
+			*pi = end;
+			free(data);
+		}
+		return (count);
+	}
 }
 /**
  * _printf - cheap clone of printf function
@@ -131,9 +146,8 @@ int is_valid_flag(const char *flag)
  */
 int _printf(const char *format, ...)
 {
-	int count = 0, i, format_len, end;
+	int count = 0, i, format_len = _strlen(format), ret;
 	conv_spec_t *pspec = NULL;
-	char *data = NULL;
 	static char buffer[BUFF_SIZE + 1];
 	static int buff_init = FALSE;
 	va_list argptr;
@@ -145,23 +159,15 @@ int _printf(const char *format, ...)
 		buffer[0] = '\0';
 		buff_init = TRUE;
 	}
-	format_len = _strlen(format);
 	va_start(argptr, format);
 	for (i = 0; i < format_len; ++i)
 	{
 		if (format[i] == '%')
 		{
-			end = tokenize(&pspec, format, format_len, i);
-			if (end == -1)
-				count += _write_char(buffer, format[i], BUFF_SIZE);
-			else
-				if (pspec != NULL && pspec->formatter != NULL)
-				{
-					data = pspec->formatter(pspec, argptr);
-					count += _write_str(buffer, data, BUFF_SIZE);
-					i = end;
-					free(data);
-				}
+			ret = _print_f(&pspec, format, format_len, &i, buffer, argptr);
+			if (ret == -1)
+				return (-1);
+			count += ret;
 		}
 		else
 			count += _write_char(buffer, format[i], BUFF_SIZE);
