@@ -127,6 +127,7 @@ int _print_f(const conv_spec_t *pspec, va_list argptr, char *buffer)
 			{
 				data[0] = '\0';
 				_write_str(buffer, data, BUFF_SIZE);
+				_write_str(buffer, data, BUFF_SIZE);
 				return (1);
 			}
 		}
