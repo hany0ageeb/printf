@@ -12,25 +12,16 @@ char *_str(const char c, int len)
 
 	if (len > 0)
 	{
-		if (c != '\0')
+		str = malloc(sizeof(char) * (len + 1));
+		if (str != NULL)
 		{
-			str = malloc(sizeof(char) * (len + 1));
-			if (str != NULL)
+			str[len] = '\0';
+			len--;
+			while (len >= 0)
 			{
-				str[len] = '\0';
+				str[len] = c;
 				len--;
-				while (len >= 0)
-				{
-					str[len] = c;
-					len--;
-				}
 			}
-		}
-		else
-		{
-			str = malloc(sizeof(char));
-			if (str != NULL)
-				str[0] = '\0';
 		}
 	}
 	return (str);

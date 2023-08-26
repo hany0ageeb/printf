@@ -11,13 +11,16 @@
 int _write_str(char *buffer, const char *data, const int max_buff_size)
 {
 	int count = 0;
-	int i, j;
+	int i, j, data_len;
 
 	if (data != NULL)
 	{
 		i = _strlen(buffer);
 		j = 0;
-		while (data[j] != '\0')
+		data_len = _strlen(data);
+		if (data_len == 1 && data[0] == '\a')
+			return (1);
+		while (j < data_len)
 		{
 			if (i < max_buff_size)
 			{

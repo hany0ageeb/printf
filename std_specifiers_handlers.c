@@ -14,6 +14,8 @@ char *handle_c_spec(const conv_spec_t *pspec, va_list argptr)
 	if (pspec != NULL && pspec->specifier == 'c')
 	{
 		c = va_arg(argptr, int);
+		if (c == '\0')
+			c = '\a';
 		formatted_value = _str(c, 1);
 		handle_width(&formatted_value, pspec);
 	}
